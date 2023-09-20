@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Mirrored from hrahul.tk/resources by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 17 Sep 2021 07:20:38 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head>
+    <!-- Primary Meta Tags -->
+    <title>Rahul - Video Resources</title>
+    <meta name="title" content="Rahul - Video Resources">
+    <meta name="description" content="All the Codes, Links, etc from Rahul will be Here">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="index.html">
+    <meta property="og:title" content="Rahul - Video Resources">
+    <meta property="og:description" content="All the Codes, Links, etc from Rahul will be Here">
+    <meta property="og:image" content="https://cdn.discordapp.com/avatars/770530998461923348/2cf3be98493b7b1a456e7ffdfd90912b.jpg?size=1024">
+    <meta property="theme-color" content="#4169E1">
+
+    <!-- HTML Default -->
+    <link rel="shortcut icon" href="img/favicon.ico" type="image/x-icon">
+    <link rel="icon" href="img/favicon.ico" type="image/x-icon">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="index.html">
+    <meta property="twitter:title" content="Rahul - Discord Youtuber and Developer">
+    <meta property="twitter:description" content="I'm Rahul, I am a Developer and a Youtuber.">
+    <meta property="twitter:image" content="https://cdn.discordapp.com/avatars/770530998461923348/2cf3be98493b7b1a456e7ffdfd90912b.jpg?size=1024">
+    
+    <!-- CSS -->
+    <link rel="preconnect" href="https://fonts.googleapis.com/">
+<link href="https://fonts.googleapis.com/css2?family=Material+Icons"
+      rel="stylesheet">
+      <link rel="stylesheet" href="../cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+<link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&amp;display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+    <!-- Particle JS -->
+    <div id="particles-js"></div>
+    <!-- END -->
+    
+    <!-- Sidenav -->
+    <div class="sidenav">
+        <h1 class="title">
+            Rahul
+        </h1>
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="about.html">About Me</a></li>
+            <li><a href="resources.html" class="active">Resources</a></li>
+            <li><a href="https://discord.gg/GZbQn8aJev">Contact</a></li>
+            <li><a href="video-ideas.html">Video Ideas</a></li>
+        </ul>
+        <p><br></p>
+    </div>
+    <!-- END -->
+    
+    <!-- Main Page -->
+    <div class="main-page">
+        <div class="portfolio container">
+            <div class="title-section">
+                <div class="two-rows sec-title">
+                    <h1>Resources</h1>
+                </div>
+                <div class="two-rows search">
+                    <input class="search-inputs" type="search" name="search" onkeydown="search_article(this)" placeholder="Search Resources">
+                </div>
+            </div>
+            <div class="articlex-container">
+                <p style="text-align: center">Loading ...</p>
+            </div>
+        </div>
+    </div>
+    <!-- END -->
+    
+    <!-- SideNav Button -->
+    <button class="sidenav-activate" onclick="toggle_sidenav()">
+        <span class="indicator hide"><i class="material-icons">close</i></span>
+        <span class="indicator"><i class="material-icons">menu</i></span>
+    </button>
+    <!-- END -->
+
+
+
+
+    <!-- ---------==========   FIREBASE   ==========--------- -->
+    <script src="../www.gstatic.com/firebasejs/8.7.1/firebase-app.js"></script>
+    <script src="../www.gstatic.com/firebasejs/8.7.1/firebase-analytics.js"></script>
+    <script src="../www.gstatic.com/firebasejs/8.7.1/firebase-firestore.js"></script>
+
+
+    <!-- Scripts -->
+    <script src="js/jquery.min.js"></script>
+    <script src="lib/particlejs/particles.js"></script>
+    <script src="js/script.js"></script>
+    <script>
+        // Rahul API Key
+        $(()=>{
+            // var array = [];
+            // $.get(API_END+'endpoint.php?get=articles&api_key='+API_KEY, (response)=>{
+            //     response.forEach(element => {
+            //         var html = '<div class="resources-container"> <a href="article#/'+element['id']+'/'+element['url']+'" class="link"> <div class="img-container"> <img src="'+element['image']+'" alt="'+element['title']+'"> </div> <div class="context"> <h2 class="article-title"> '+element['title']+'</h2> <p>'+element['description']+'</p> </div> </a> </div>';
+            //         array.push(html);
+            //         // alert(html);
+            //     });
+            //     $('.articlex-container').html(array.join(""));
+            // });
+            const db = firebase.firestore();
+            db.collection("articles")
+            .orderBy("createdAt", "desc")
+            .get()
+            .then((querySnapshot) => {
+                var content = "";
+                querySnapshot.forEach((doc) => {
+                    // doc.data() is never undefined for query doc snapshots
+                    
+                    content += '<div class="resources-container"> <a href="article#/'+doc.id+'/'+convertToSlug(doc.data().name)+'" class="link"> <div class="img-container"> <img src="'+doc.data().imageURL+'" alt="'+doc.data().name+'"> </div> <div class="context"> <h2 class="article-title"> '+doc.data().name+'</h2> <p>'+doc.data().description+'</p> </div> </a> </div>';
+                    
+                    // console.log(doc.id, " => ", doc.data());
+                });
+                if (querySnapshot.size < 1)
+                {
+                    // No Data
+                    content += '<p style="text-align: center">No article for now, im still writing something interesting today.😊 <a href="contact">Want to suggest a topic?</a></p>';
+                }
+                $('.articlex-container').html(content);
+                // alert(content);
+            })
+            .catch((error) => {
+                console.log("Error getting documents: ", error);
+            });
+        });
+    </script>
+</body>
+
+<!-- Mirrored from hrahul.tk/resources by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 17 Sep 2021 07:20:39 GMT -->
+</html>
